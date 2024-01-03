@@ -115,7 +115,7 @@ def poll_livestream(video_id: str, API_KEY: str, csv_path: str) -> bool:
     else:
         return True
 
-def get_thumbnail_and_start_time_livestream(video_id: str, thumbnail_folder: str, API_KEY: str) -> datetime:
+def get_thumbnail_and_start_time_livestream(video_id: str, get_thumbnail: bool, thumbnail_folder: str, API_KEY: str) -> datetime:
     ''' This might seem random but I'm simply trying to be conservative with token use.
     Thumbnail only gets saved if it doesn't exist. Filename is simply channelID_videoID.jpg
 
