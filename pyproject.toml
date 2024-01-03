@@ -1,0 +1,60 @@
+# Reference: https://github.com/pypa/sampleproject/blob/main/pyproject.toml 
+[project]
+name = "ntsu-ytwrapper"  # Required
+version = "0.0.1"  # Required
+description = "Personal wrapper for youtube API"  # Optional
+readme = "README.md" # Optional
+requires-python = ">=3.10"
+license = {file = "LICENSE.txt"}
+keywords = []  # Optional
+authors = [] # Optional
+maintainers = [] # Optional
+
+# Classifiers help users find your project by categorizing it.
+#
+# For a list of valid classifiers, see https://pypi.org/classifiers/
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Topic :: Utilities",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3 :: Only",
+]
+
+# This field lists other packages that your project depends on to run.
+# Any package you put here will be installed by pip when your project is
+# installed, so they must be valid existing projects.
+#
+# For an analysis of this field vs pip's requirements files see:
+# https://packaging.python.org/discussions/install-requires-vs-requirements/
+dependencies = [ # Optional
+  "google-api-python-client",
+  "pytz",
+  "Pillow"
+]
+[project.optional-dependencies] # Optional
+dev = []
+test = []
+
+[project.urls]  # Optional
+"Homepage" = "https://github.com/natsukashiixo/ntsu-ytwrapper"
+"Bug Reports" = "https://github.com/natsukashiixo/ntsu-ytwrapper/issues"
+"Source" = "https://github.com/natsukashiixo/ntsu-ytwrapper"
+
+[project.scripts]  # Optional
+
+# This is configuration specific to the `setuptools` build backend.
+# If you are using a different build backend, you will need to change this.
+[tool.setuptools]
+# If there are data files included in your packages that need to be
+# installed, specify them here.
+package-data = {"sample" = ["*.dat"]}
+
+[build-system]
+# These are the assumed default build requirements from pip:
+# https://pip.pypa.io/en/stable/reference/pip/#pep-517-and-518-support
+requires = ["setuptools>=43.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
