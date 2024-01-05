@@ -35,10 +35,11 @@ def getall_channels_dot_list(channel_id: str, API_KEY: str, *args) -> tuple:
         api_service_name, api_version, developerKey = DEVELOPER_KEY)
 
     request = youtube.channels().list(
-        # full list of parts is auditDetails,brandingSettings,contentDetails,contentOwnerDetails,id,localizations,snippet,statistics,status,topicDetails
-        # i still haven't seen in the docs which ones have which authorization level but i only need the public ones
-        part="snippet,statistics,contentDetails,topicDetails,status,brandingSettings,localizations", # these ones didn't mention which auth level was needed in the docs so i have to assume they're public
+        part="snippet,statistics,contentDetails,topicDetails,status,brandingSettings,localizations", # these are all the public parts
         id=channel_id, #p sure this takes a csv string of max 50 elements
+        # but most likely I won't put in logic for handling multiple channels in this function.
         maxResults=50
     )
     raw_response = request.execute()
+
+    
