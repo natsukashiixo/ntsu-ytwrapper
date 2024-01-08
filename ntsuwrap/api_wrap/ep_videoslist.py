@@ -209,7 +209,7 @@ class VideosDotListSingleUpload:
     def allowed_countries(response):
         #contentDetails.regionrestriction.allowed[]
         pass
-    def blocked_countrues(response):
+    def blocked_countries(response):
         #contentDetails.regionrestriction.allowed[]
         pass
     def is_age_restricted(response):
@@ -299,7 +299,7 @@ class VideosDotListSingleStream:
     def allowed_countries(response):
         #contentDetails.regionrestriction.allowed[]
         pass
-    def blocked_countrues(response):
+    def blocked_countries(response):
         #contentDetails.regionrestriction.allowed[]
         pass
     def is_age_restricted(response):
