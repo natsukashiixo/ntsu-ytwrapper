@@ -9,6 +9,9 @@ import googleapiclient.discovery
 import pytz
 from PIL import Image
 
+from ntsuwrap import YoutubeTokenBucket
+from youtube_status import youtube_status
+
 def poll_livestream(video_id: str, API_KEY: str, csv_path: str) -> bool:
     jst = pytz.timezone('Asia/Tokyo')
     
@@ -151,4 +154,93 @@ def poll_video(video_id: str, API_KEY: str) -> tuple:
 
     return	channel_id, channel_name, current_subcribers, video_id, current_likes, current_views, jst_timestamp
 
+class VideosDotListSingleUpload:
+    def __init__(self, api_key: str, channel_id: str, bucket: YoutubeTokenBucket):
+        # these should basically never change between classes
+        self.api_key = api_key
+        self.bucket = bucket
+        # these ones change so be careful with copy paste
+        #self.TOKENCOST = 1
+        #self.channel_id = channel_id
+
+        def _get_response(): # contents of this function should change between classes but name can be the same
+            os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "0"
+            api_service_name = "youtube"
+            api_version = "v3"
+            DEVELOPER_KEY = self.api_key
+            youtube = googleapiclient.discovery.build(
+                api_service_name, api_version, developerKey = DEVELOPER_KEY)
+
+            request = youtube.videos().list(
+                part="snippet,statistics,contentDetails,topicDetails,status,localizations,suggestions,player", # these are all the public parts
+                id=self.channel_id, #p sure this takes a csv string of max 50 elements
+                # this class is just for 1 video though
+                maxResults=50
+            )
+            yt_response = request.execute()
+            return yt_response
+
+        if youtube_status() and self.bucket.take(self.TOKENCOST):
+            self.yt_response = _get_response()
+
+    #items[0]snippet
+    def get_title(response):
+        pass
+    def get_publishtime(response):
+        pass # convert str to datetime object
+    def get_desc(response):
+        pass
+    def get_thumbnail(response):
+        pass #use decorators or something to indicate quality
+    def get_ch_title(response):
+        pass
+    def get_tags(response):
+        pass
+    def get_categoryID(response):
+        pass
+    def is_livestream(response):
+        pass #should be None, if not None you're using the wrong class
+    def default_audio_lang(response):
+        pass #not sure if i even need this
+
+    #items[0]contentDetails
+    def get_duration(response):
+        pass
+    def allowed_countries(response):
+        #contentDetails.regionrestriction.allowed[]
+        pass
+    def blocked_countrues(response):
+        #contentDetails.regionrestriction.allowed[]
+        pass
+    def is_age_restricted(response):
+        #contentDetails.contentRating.ytRating
+        pass
+
+    #items[0]status
+    def get_reject_reason(response):
+        pass
+    def is_embeddable(response):
+        pass
+    def is_publicstatsviewable(response):
+        pass # do i even need this? views and likes are always accessible even if this is false
+
+    #items[0]statistics
+    def get_views(response):
+        pass
+    def get_likes(response):
+        pass
+    def get_commentcount(response):
+        pass #low prio, can't think of how it's useful atm
+
+    #items[0]player
+    def get_embedframe(response):
+        pass # they're talking about me needing to set the aspect ratio in my request in the docs, not sure if i should
+    def get_embed_height(response):
+        pass # only exists if specified in request
+    def get_embed_width(response):
+        pass # only exists if specified in request
+
+    #items[0]suggestions
+    def get_suggested_tags(response):
+        pass
     
