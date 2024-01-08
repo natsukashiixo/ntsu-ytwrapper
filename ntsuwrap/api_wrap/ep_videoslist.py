@@ -155,13 +155,13 @@ def poll_video(video_id: str, API_KEY: str) -> tuple:
     return	channel_id, channel_name, current_subcribers, video_id, current_likes, current_views, jst_timestamp
 
 class VideosDotListSingleUpload:
-    def __init__(self, api_key: str, channel_id: str, bucket: YoutubeTokenBucket):
+    def __init__(self, api_key: str, video_id: str, bucket: YoutubeTokenBucket):
         # these should basically never change between classes
         self.api_key = api_key
         self.bucket = bucket
         # these ones change so be careful with copy paste
-        #self.TOKENCOST = 1
-        #self.channel_id = channel_id
+        self.TOKENCOST = 1
+        self.video_id = video_id
 
         def _get_response(): # contents of this function should change between classes but name can be the same
             os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "0"
@@ -173,7 +173,7 @@ class VideosDotListSingleUpload:
 
             request = youtube.videos().list(
                 part="snippet,statistics,contentDetails,topicDetails,status,localizations,suggestions,player", # these are all the public parts
-                id=self.channel_id, #p sure this takes a csv string of max 50 elements
+                id=self.video_id, #p sure this takes a csv string of max 50 elements
                 # this class is just for 1 video though
                 maxResults=50
             )
@@ -192,6 +192,8 @@ class VideosDotListSingleUpload:
         pass
     def get_thumbnail(response):
         pass #use decorators or something to indicate quality
+    def get_ch_id(response):
+        pass
     def get_ch_title(response):
         pass
     def get_tags(response):
@@ -245,13 +247,13 @@ class VideosDotListSingleUpload:
         pass
 
 class VideosDotListSingleStream:
-    def __init__(self, api_key: str, channel_id: str, bucket: YoutubeTokenBucket):
+    def __init__(self, api_key: str, video_id: str, bucket: YoutubeTokenBucket):
         # these should basically never change between classes
         self.api_key = api_key
         self.bucket = bucket
         # these ones change so be careful with copy paste
-        #self.TOKENCOST = 1
-        #self.channel_id = channel_id
+        self.TOKENCOST = 1
+        self.video_id = video_id
 
         def _get_response(): # contents of this function should change between classes but name can be the same
             os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "0"
@@ -263,7 +265,7 @@ class VideosDotListSingleStream:
 
             request = youtube.videos().list(
                 part="snippet,statistics,contentDetails,topicDetails,status,localizations,suggestions,player,liveStreamingDetails", # these are all the public parts
-                id=self.channel_id, #p sure this takes a csv string of max 50 elements
+                id=self.video_id, #p sure this takes a csv string of max 50 elements
                 # this class is just for 1 video though
                 maxResults=50
             )
@@ -282,6 +284,8 @@ class VideosDotListSingleStream:
         pass
     def get_thumbnail(response):
         pass #use decorators or something to indicate quality
+    def get_ch_id(response):
+        pass
     def get_ch_title(response):
         pass
     def get_tags(response):
