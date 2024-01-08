@@ -43,7 +43,7 @@ class ChannelsDotListSingle:
         pass #needs str to timestamp conversion
     def get_pfp(response):
         pass #use constructors to decide which one to get?
-        #like object.get_pfp(resp).high ?
+        #like object.get_pfp(response).high ?
     
     #items[0]statistics
     def get_subscribers(response) -> str or int:
@@ -58,4 +58,3 @@ class ChannelsDotListSingle:
     #items[0]status
     def get_privacystatus(response):
         pass
-    
