@@ -66,3 +66,35 @@ class PlaylistItemsDotListSingle:
 
         if youtube_status() and self.bucket.take(self.TOKENCOST):
             self.yt_response = _get_response()
+
+    #each item in a playlist is its own dict in a list stored in 'items', should i just return lists with no keyword pairing and pray?
+    
+    #item[i]snippet
+    def get_vid_playlist_addtime(response):
+        pass # convert str -> datetime
+    def get_vid_playlist_adduser(response):
+        pass # gets which user added the video to the playlist, returns a channelID, not sure if i need this?
+    def get_vid_title(response):
+        pass
+    def get_vid_desc(response):
+        pass
+    def get_vid_thumbnails(response):
+        pass #decorator magic once again
+    def get_playlist_owner(response):
+        pass
+    def get_vid_owner_title(response):
+        pass
+    def get_vid_owner_id(response):
+        pass
+    def get_vid_index(response):
+        pass #placement in playlist, starts at index 0
+    def get_vid_id(response):
+        #snippet.resourceId.videoID
+        pass #docs here are confusing, seem to imply that you can add non-videos to a playlist which feels illegal (livestreams should still be considered videos on youtubes end)
+
+    #item[x]contentDetails
+    def get_vid_id_bckp(response):
+        pass #this is the one i've used before with playlists that contain livestreams, in case previous function doesn't work
+    def get_vid_publishtime(response):
+        pass # str -> datetime conversion pls
+    
