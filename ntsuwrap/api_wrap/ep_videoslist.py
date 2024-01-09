@@ -1,14 +1,7 @@
 import os
-import csv
-from pathlib import Path
-from io import BytesIO
 from datetime import datetime
-
-import requests
 import googleapiclient.discovery
 import pytz
-from PIL import Image
-
 from ntsuwrap import YoutubeTokenBucket
 from youtube_status import youtube_status
 
@@ -163,7 +156,7 @@ class VideosDotListSingleUpload:
         self.TOKENCOST = 1
         self.video_id = video_id
 
-        def _get_response(): # contents of this function should change between classes but name can be the same
+        def _get_response() -> list: # contents of this function should change between classes but name can be the same
             os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "0"
             api_service_name = "youtube"
             api_version = "v3"
@@ -184,66 +177,66 @@ class VideosDotListSingleUpload:
             self.yt_response = _get_response()
 
     #items[0]snippet
-    def get_title(response):
+    def get_title(response) -> str:
         pass
-    def get_publishtime(response):
+    def get_publishtime(response) -> datetime:
         pass # convert str to datetime object
-    def get_desc(response):
+    def get_desc(response) -> str:
         pass
-    def get_thumbnail(response):
+    def get_thumbnail(response) -> str:
         pass #use decorators or something to indicate quality
-    def get_ch_id(response):
+    def get_ch_id(response) -> str:
         pass
-    def get_ch_title(response):
+    def get_ch_title(response) -> str:
         pass
-    def get_tags(response):
+    def get_tags(response) -> list:
         pass
-    def get_categoryID(response):
-        pass
-    def is_livestream(response):
+    def get_categoryID(response)  -> int:
+        pass #not sure if int but probably
+    def is_livestream(response) -> bool:
         pass #should be None, if not None you're using the wrong class
-    def default_audio_lang(response):
-        pass #not sure if i even need this
+    def default_audio_lang(response) -> str:
+        pass #not sure if i even need this, might also be an i18n-object and not str
 
     #items[0]contentDetails
-    def get_duration(response):
-        pass
-    def allowed_countries(response):
+    def get_duration(response) -> int:
+        pass #should probably be transformed into an int in seconds
+    def allowed_countries(response) -> list:
         #contentDetails.regionrestriction.allowed[]
         pass
-    def blocked_countries(response):
+    def blocked_countries(response) -> list:
         #contentDetails.regionrestriction.allowed[]
         pass
-    def is_age_restricted(response):
+    def is_age_restricted(response) -> bool:
         #contentDetails.contentRating.ytRating
         pass
 
     #items[0]status
-    def get_reject_reason(response):
+    def get_reject_reason(response) -> str:
+        pass #is this even public?
+    def is_embeddable(response) -> bool:
         pass
-    def is_embeddable(response):
-        pass
-    def is_publicstatsviewable(response):
+    def is_publicstatsviewable(response) -> bool:
         pass # do i even need this? views and likes are always accessible even if this is false
 
     #items[0]statistics
-    def get_views(response):
+    def get_views(response) -> int:
         pass
-    def get_likes(response):
+    def get_likes(response) -> int:
         pass
-    def get_commentcount(response):
+    def get_commentcount(response) -> int:
         pass #low prio, can't think of how it's useful atm
 
     #items[0]player
-    def get_embedframe(response):
+    def get_embedframe(response) -> str:
         pass # they're talking about me needing to set the aspect ratio in my request in the docs, not sure if i should
-    def get_embed_height(response):
+    def get_embed_height(response) -> int:
         pass # only exists if specified in request
-    def get_embed_width(response):
+    def get_embed_width(response) -> int:
         pass # only exists if specified in request
 
     #items[0]suggestions
-    def get_suggested_tags(response):
+    def get_suggested_tags(response) -> list:
         pass
 
 class VideosDotListSingleStream:
@@ -255,7 +248,7 @@ class VideosDotListSingleStream:
         self.TOKENCOST = 1
         self.video_id = video_id
 
-        def _get_response(): # contents of this function should change between classes but name can be the same
+        def _get_response() -> list: # contents of this function should change between classes but name can be the same
             os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "0"
             api_service_name = "youtube"
             api_version = "v3"
@@ -276,77 +269,79 @@ class VideosDotListSingleStream:
             self.yt_response = _get_response()
 
     #items[0]snippet
-    def get_title(response):
+    def get_title(response) -> str:
         pass
-    def get_publishtime(response):
+    def get_publishtime(response) -> datetime:
         pass # convert str to datetime object
-    def get_desc(response):
+    def get_desc(response) -> str:
         pass
-    def get_thumbnail(response):
+    def get_thumbnail(response) -> str:
         pass #use decorators or something to indicate quality
-    def get_ch_id(response):
+    def get_ch_id(response) -> str:
         pass
-    def get_ch_title(response):
+    def get_ch_title(response) -> str:
         pass
-    def get_tags(response):
+    def get_tags(response) -> list:
         pass
-    def get_categoryID(response):
+    def get_categoryID(response) -> int:
         pass
-    def is_livestream(response):
+    def is_livestream(response) -> bool:
         pass #should not be None, if None you're using the wrong class
-    def default_audio_lang(response):
-        pass #not sure if i even need this
+    def currently_live(response) -> bool:
+        pass #youtube tells you this in a string, not a bool btw
+    def default_audio_lang(response) -> str:
+        pass #not sure if i even need this, i18n mentioned in the docs
 
     #items[0]contentDetails
-    def get_duration(response):
-        pass
-    def allowed_countries(response):
+    def get_duration(response) -> int:
+        pass #convert to int in seconds probs
+    def allowed_countries(response) -> list:
         #contentDetails.regionrestriction.allowed[]
         pass
-    def blocked_countries(response):
+    def blocked_countries(response) -> list:
         #contentDetails.regionrestriction.allowed[]
         pass
-    def is_age_restricted(response):
+    def is_age_restricted(response) -> bool:
         #contentDetails.contentRating.ytRating
         pass
 
     #items[0]status
-    def get_reject_reason(response):
+    def get_reject_reason(response) -> str:
         pass
-    def is_embeddable(response):
+    def is_embeddable(response) -> bool:
         pass
-    def is_publicstatsviewable(response):
+    def is_publicstatsviewable(response) -> bool:
         pass # do i even need this? views and likes are always accessible even if this is false
 
     #items[0]statistics
-    def get_views(response):
+    def get_views(response) -> int:
         pass
-    def get_likes(response):
+    def get_likes(response) -> int:
         pass
-    def get_commentcount(response):
+    def get_commentcount(response) -> int:
         pass #low prio, can't think of how it's useful atm
 
     #items[0]player
-    def get_embedframe(response):
+    def get_embedframe(response) -> str:
         pass # they're talking about me needing to set the aspect ratio in my request in the docs, not sure if i should
-    def get_embed_height(response):
+    def get_embed_height(response) -> int:
         pass # only exists if specified in request
-    def get_embed_width(response):
+    def get_embed_width(response) -> int:
         pass # only exists if specified in request
 
     #items[0]suggestions
-    def get_suggested_tags(response):
+    def get_suggested_tags(response) -> list:
         pass
 
     #items[0]liveStreamingDetails
     #all time related ones need str -> datetime parsing
-    def get_scheduled_start(response):
+    def get_scheduled_start(response) -> datetime:
         pass
-    def get_scheduled_end(response):
+    def get_scheduled_end(response) -> datetime:
         pass
-    def get_actual_start(response):
+    def get_actual_start(response) -> datetime:
         pass
-    def get_actual_end(response):
+    def get_actual_end(response) -> datetime:
         pass
-    def get_ccv(response):
+    def get_ccv(response) -> int:
         pass

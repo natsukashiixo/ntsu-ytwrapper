@@ -1,5 +1,7 @@
 import os
+from datetime import datetime
 import googleapiclient.discovery
+import pytz
 from ntsuwrap import YoutubeTokenBucket
 from youtube_status import youtube_status
 
@@ -12,7 +14,7 @@ class ChannelsDotListSingle:
         self.TOKENCOST = 1
         self.channel_id = channel_id
 
-        def _get_response(): # contents of this function should change between classes but name can be the same
+        def _get_response() -> list: # contents of this function should change between classes but name can be the same
             os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "0"
             api_service_name = "youtube"
             api_version = "v3"
@@ -33,15 +35,15 @@ class ChannelsDotListSingle:
             self.yt_response = _get_response()
 
     #items[0]snippet
-    def get_name(response):
+    def get_name(response) -> str:
         pass
-    def get_desc(response):
+    def get_desc(response) -> str:
         pass
-    def get_url(response):
+    def get_url(response) -> str:
         pass
-    def get_createtime(response):
+    def get_createtime(response) -> datetime:
         pass #needs str to timestamp conversion
-    def get_pfp(response):
+    def get_pfp(response) -> str:
         pass #use constructors to decide which one to get?
         #like object.get_pfp(response).high ?
     
@@ -52,9 +54,9 @@ class ChannelsDotListSingle:
         else:
             subcount = int(response['items'][0]['statistics'].get('subscriberCount', 'N/A'))
         return subcount
-    def get_vidcount(response):
+    def get_vidcount(response) -> int:
         pass
 
     #items[0]status
-    def get_privacystatus(response):
+    def get_privacystatus(response) -> str:
         pass
