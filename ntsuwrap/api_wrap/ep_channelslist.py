@@ -1,11 +1,12 @@
 import os
 from datetime import datetime
+from typing import Any
 import googleapiclient.discovery
 import pytz
 from ntsuwrap import YoutubeTokenBucket
 from youtube_status import youtube_status
 
-class ChannelsDotListSingle:
+class ChannelsDotList:
     def __init__(self, api_key: str, channel_id: str, bucket: YoutubeTokenBucket):
         # these should basically never change between classes
         self.api_key = api_key
@@ -24,8 +25,7 @@ class ChannelsDotListSingle:
 
             request = youtube.channels().list(
                 part="snippet,statistics,contentDetails,topicDetails,status,brandingSettings,localizations", # these are all the public parts
-                id=self.channel_id, #p sure this takes a csv string of max 50 elements
-                # but most likely I won't put in logic for handling multiple channels in this function.
+                id=self.channel_id,
                 maxResults=50
             )
             yt_response = request.execute()
@@ -33,7 +33,27 @@ class ChannelsDotListSingle:
 
         if youtube_status() and self.bucket.take(self.TOKENCOST):
             self.yt_response = _get_response()
+    
+    def first_item(self) -> dict:
+        return self.yt_response['items'][0] if self.yt_response else {}
 
+    def item_by_index(self, x: int) -> dict:
+        return self.yt_response['items'][x] if self.yt_response else {}
+
+    def item_by_snippet_kwp(self, keyword: str, value) -> dict:
+        for i, item in enumerate(self.yt_response.get('items', [])):
+            if item.get('snippet', {}).get(keyword) == value:
+                return item
+        print(f'key value pair {keyword}: {value} not found')
+        return {}
+
+    def all_items(self) -> list:
+        return self.yt_response.get('items', [])
+
+
+class ParseChannels:
+    def __init__(self, item_dict) -> None:
+        self.item_dict = item_dict
     #items[0]snippet
     def get_name(response) -> str:
         pass

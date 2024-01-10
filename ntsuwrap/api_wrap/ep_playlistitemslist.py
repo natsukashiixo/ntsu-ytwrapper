@@ -67,8 +67,26 @@ class PlaylistItemsDotList:
         if youtube_status() and self.bucket.take(self.TOKENCOST):
             self.yt_response = _get_response()
 
+    def first_item(self) -> dict:
+        return self.yt_response['items'][0] if self.yt_response else {}
+
+    def item_by_index(self, x: int) -> dict:
+        return self.yt_response['items'][x] if self.yt_response else {}
+
+    def item_by_snippet_kwp(self, keyword: str, value) -> dict:
+        for i, item in enumerate(self.yt_response.get('items', [])):
+            if item.get('snippet', {}).get(keyword) == value:
+                return item
+        print(f'key value pair {keyword}: {value} not found')
+        return {}
+
+    def all_items(self) -> list:
+        return self.yt_response.get('items', [])
+
     #each item in a playlist is its own dict in a list stored in 'items', should i just return lists with no keyword pairing and pray?
-    
+class ParsePlaylistItem:
+    def __init__(self, item_dict) -> None:
+        self.item_dict = item_dict
     #item[i]snippet
     def get_vid_playlist_addtime(response) -> datetime:
         pass # convert str -> datetime

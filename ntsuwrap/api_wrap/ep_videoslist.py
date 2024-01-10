@@ -147,99 +147,7 @@ def poll_video(video_id: str, API_KEY: str) -> tuple:
 
     return	channel_id, channel_name, current_subcribers, video_id, current_likes, current_views, jst_timestamp
 
-class VideosDotListSingleUpload:
-    def __init__(self, api_key: str, video_id: str, bucket: YoutubeTokenBucket):
-        # these should basically never change between classes
-        self.api_key = api_key
-        self.bucket = bucket
-        # these ones change so be careful with copy paste
-        self.TOKENCOST = 1
-        self.video_id = video_id
-
-        def _get_response() -> list: # contents of this function should change between classes but name can be the same
-            os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "0"
-            api_service_name = "youtube"
-            api_version = "v3"
-            DEVELOPER_KEY = self.api_key
-            youtube = googleapiclient.discovery.build(
-                api_service_name, api_version, developerKey = DEVELOPER_KEY)
-
-            request = youtube.videos().list(
-                part="snippet,statistics,contentDetails,topicDetails,status,localizations,suggestions,player", # these are all the public parts
-                id=self.video_id, #p sure this takes a csv string of max 50 elements
-                # this class is just for 1 video though
-                maxResults=50
-            )
-            yt_response = request.execute()
-            return yt_response
-
-        if youtube_status() and self.bucket.take(self.TOKENCOST):
-            self.yt_response = _get_response()
-
-    #items[0]snippet
-    def get_title(response) -> str:
-        pass
-    def get_publishtime(response) -> datetime:
-        pass # convert str to datetime object
-    def get_desc(response) -> str:
-        pass
-    def get_thumbnail(response) -> str:
-        pass #use decorators or something to indicate quality
-    def get_ch_id(response) -> str:
-        pass
-    def get_ch_title(response) -> str:
-        pass
-    def get_tags(response) -> list:
-        pass
-    def get_categoryID(response)  -> int:
-        pass #not sure if int but probably
-    def is_livestream(response) -> bool:
-        pass #should be None, if not None you're using the wrong class
-    def default_audio_lang(response) -> str:
-        pass #not sure if i even need this, might also be an i18n-object and not str
-
-    #items[0]contentDetails
-    def get_duration(response) -> int:
-        pass #should probably be transformed into an int in seconds
-    def allowed_countries(response) -> list:
-        #contentDetails.regionrestriction.allowed[]
-        pass
-    def blocked_countries(response) -> list:
-        #contentDetails.regionrestriction.allowed[]
-        pass
-    def is_age_restricted(response) -> bool:
-        #contentDetails.contentRating.ytRating
-        pass
-
-    #items[0]status
-    def get_reject_reason(response) -> str:
-        pass #is this even public?
-    def is_embeddable(response) -> bool:
-        pass
-    def is_publicstatsviewable(response) -> bool:
-        pass # do i even need this? views and likes are always accessible even if this is false
-
-    #items[0]statistics
-    def get_views(response) -> int:
-        pass
-    def get_likes(response) -> int:
-        pass
-    def get_commentcount(response) -> int:
-        pass #low prio, can't think of how it's useful atm
-
-    #items[0]player
-    def get_embedframe(response) -> str:
-        pass # they're talking about me needing to set the aspect ratio in my request in the docs, not sure if i should
-    def get_embed_height(response) -> int:
-        pass # only exists if specified in request
-    def get_embed_width(response) -> int:
-        pass # only exists if specified in request
-
-    #items[0]suggestions
-    def get_suggested_tags(response) -> list:
-        pass
-
-class VideosDotListSingleStream:
+class VideosDotList:
     def __init__(self, api_key: str, video_id: str, bucket: YoutubeTokenBucket):
         # these should basically never change between classes
         self.api_key = api_key
@@ -267,6 +175,26 @@ class VideosDotListSingleStream:
 
         if youtube_status() and self.bucket.take(self.TOKENCOST):
             self.yt_response = _get_response()
+    
+    def first_item(self) -> dict:
+        return self.yt_response['items'][0] if self.yt_response else {}
+
+    def item_by_index(self, x: int) -> dict:
+        return self.yt_response['items'][x] if self.yt_response else {}
+
+    def item_by_snippet_kwp(self, keyword: str, value) -> dict:
+        for i, item in enumerate(self.yt_response.get('items', [])):
+            if item.get('snippet', {}).get(keyword) == value:
+                return item
+        print(f'key value pair {keyword}: {value} not found')
+        return {}
+    
+    def all_items(self) -> list:
+        return self.yt_response.get('items', [])
+    
+class ParseVideoItem: #might only need this one and then do some checks if people are trying to get livestreamdata from uploaded videos
+    def __init__(self, item_dict) -> None:
+        self.item_dict = item_dict
 
     #items[0]snippet
     def get_title(response) -> str:
@@ -335,6 +263,11 @@ class VideosDotListSingleStream:
 
     #items[0]liveStreamingDetails
     #all time related ones need str -> datetime parsing
+    def is_livestream(response) -> bool:
+        if not response.get('liveStreamingDetails'):
+            #eventually raise custom exception
+            return False
+        return True
     def get_scheduled_start(response) -> datetime:
         pass
     def get_scheduled_end(response) -> datetime:
@@ -344,4 +277,6 @@ class VideosDotListSingleStream:
     def get_actual_end(response) -> datetime:
         pass
     def get_ccv(response) -> int:
+        pass
+    def currently_live(response) -> bool:
         pass
