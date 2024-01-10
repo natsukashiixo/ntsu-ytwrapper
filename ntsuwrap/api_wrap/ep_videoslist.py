@@ -197,86 +197,114 @@ class ParseVideoItem: #might only need this one and then do some checks if peopl
         self.item_dict = item_dict
 
     #items[0]snippet
-    def get_title(response) -> str:
+    def get_title(self) -> str:
+        return self.item_dict['snippet'].get('')
         pass
-    def get_publishtime(response) -> datetime:
+    def get_publishtime(self) -> datetime:
+        return self.item_dict['snippet'].get('')
         pass # convert str to datetime object
-    def get_desc(response) -> str:
+    def get_desc(self) -> str:
+        return self.item_dict['snippet'].get('')
         pass
-    def get_thumbnail(response) -> str:
+    def get_thumbnail(self) -> str:
+        return self.item_dict['snippet'].get('')
         pass #use decorators or something to indicate quality
-    def get_ch_id(response) -> str:
+    def get_ch_id(self) -> str:
+        return self.item_dict['snippet'].get('')
         pass
-    def get_ch_title(response) -> str:
+    def get_ch_title(self) -> str:
+        return self.item_dict['snippet'].get('')
         pass
-    def get_tags(response) -> list:
+    def get_tags(self) -> list:
+        return self.item_dict['snippet'].get('')
         pass
-    def get_categoryID(response) -> int:
+    def get_categoryID(self) -> int:
+        return self.item_dict['snippet'].get('')
         pass
-    def is_livestream(response) -> bool:
+    def is_livestream(self) -> bool:
+        return self.item_dict['snippet'].get('')
         pass #should not be None, if None you're using the wrong class
-    def currently_live(response) -> bool:
+    def currently_live(self) -> bool:
+        return self.item_dict['snippet'].get('')
         pass #youtube tells you this in a string, not a bool btw
-    def default_audio_lang(response) -> str:
+    def default_audio_lang(self) -> str:
+        return self.item_dict['snippet'].get('')
         pass #not sure if i even need this, i18n mentioned in the docs
 
     #items[0]contentDetails
-    def get_duration(response) -> int:
+    def get_duration(self) -> int:
+        self.item_dict['contentDetails'].get('')
         pass #convert to int in seconds probs
-    def allowed_countries(response) -> list:
+    def allowed_countries(self) -> list:
+        self.item_dict['contentDetails'].get('')
         #contentDetails.regionrestriction.allowed[]
         pass
-    def blocked_countries(response) -> list:
+    def blocked_countries(self) -> list:
+        self.item_dict['contentDetails'].get('')
         #contentDetails.regionrestriction.allowed[]
         pass
-    def is_age_restricted(response) -> bool:
+    def is_age_restricted(self) -> bool:
+        self.item_dict['contentDetails'].get('')
         #contentDetails.contentRating.ytRating
         pass
 
     #items[0]status
-    def get_reject_reason(response) -> str:
+    def get_reject_reason(self) -> str:
+        self.item_dict['status'].get('')
         pass
-    def is_embeddable(response) -> bool:
+    def is_embeddable(self) -> bool:
+        self.item_dict['status'].get('')
         pass
-    def is_publicstatsviewable(response) -> bool:
+    def is_publicstatsviewable(self) -> bool:
+        self.item_dict['status'].get('')
         pass # do i even need this? views and likes are always accessible even if this is false
 
     #items[0]statistics
-    def get_views(response) -> int:
+    def get_views(self) -> int:
+        self.item_dict['statistics'].get('')
         pass
-    def get_likes(response) -> int:
+    def get_likes(self) -> int:
+        self.item_dict['statistics'].get('')
         pass
-    def get_commentcount(response) -> int:
+    def get_commentcount(self) -> int:
+        self.item_dict['statistics'].get('')
         pass #low prio, can't think of how it's useful atm
 
     #items[0]player
-    def get_embedframe(response) -> str:
+    def get_embedframe(self) -> str:
+        self.item_dict['player'].get('')
         pass # they're talking about me needing to set the aspect ratio in my request in the docs, not sure if i should
-    def get_embed_height(response) -> int:
+    def get_embed_height(self) -> int:
+        self.item_dict['player'].get('')
         pass # only exists if specified in request
-    def get_embed_width(response) -> int:
+    def get_embed_width(self) -> int:
+        self.item_dict['player'].get('')
         pass # only exists if specified in request
 
     #items[0]suggestions
-    def get_suggested_tags(response) -> list:
+    def get_suggested_tags(self) -> list:
+        self.item_dict['suggestions'].get('')
         pass
 
     #items[0]liveStreamingDetails
     #all time related ones need str -> datetime parsing
-    def is_livestream(response) -> bool:
-        if not response.get('liveStreamingDetails'):
+    def is_livestream(self) -> bool:
+        if not self.item_dict.get('liveStreamingDetails'):
             #eventually raise custom exception
             return False
         return True
-    def get_scheduled_start(response) -> datetime:
+    def get_scheduled_start(self) -> datetime:
+        self.item_dict['liveStreamingDetails'].get('')
         pass
-    def get_scheduled_end(response) -> datetime:
+    def get_scheduled_end(self) -> datetime:
+        self.item_dict['liveStreamingDetails'].get('')
         pass
-    def get_actual_start(response) -> datetime:
+    def get_actual_start(self) -> datetime:
+        self.item_dict['liveStreamingDetails'].get('')
         pass
-    def get_actual_end(response) -> datetime:
+    def get_actual_end(self) -> datetime:
+        self.item_dict['liveStreamingDetails'].get('')
         pass
-    def get_ccv(response) -> int:
-        pass
-    def currently_live(response) -> bool:
+    def get_ccv(self) -> int:
+        self.item_dict['liveStreamingDetails'].get('')
         pass

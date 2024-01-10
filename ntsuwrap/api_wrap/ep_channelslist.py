@@ -55,28 +55,30 @@ class ParseChannels:
     def __init__(self, item_dict) -> None:
         self.item_dict = item_dict
     #items[0]snippet
-    def get_name(response) -> str:
-        pass
-    def get_desc(response) -> str:
-        pass
-    def get_url(response) -> str:
-        pass
-    def get_createtime(response) -> datetime:
-        pass #needs str to timestamp conversion
-    def get_pfp(response) -> str:
-        pass #use constructors to decide which one to get?
-        #like object.get_pfp(response).high ?
+    def get_name(self) -> str:
+        return self.item_dict['snippet'].get('')
+    def get_desc(self) -> str:
+        return self.item_dict['snippet'].get('')
+    def get_url(self) -> str:
+        return self.item_dict['snippet'].get('')
+    def get_createtime(self) -> datetime:
+        datestring = self.item_dict['snippet'].get('')
+        timestamp = datetime.strptime(datestring,)
+        return timestamp
+    def get_pfp(self, quality='hd' or 'sd' or 'low') -> str:
+        thumbnails = self.item_dict['snippet'].get('thumbnails').get({quality})
+        return thumbnails
     
     #items[0]statistics
-    def get_subscribers(response) -> str or int:
-        if response['items'][0]['statistics'].get('hiddenSubscriberCount') == True:     #unsure about this but I think a raw "if" just checks if the element exists or not
-            return "HiddenFromView"
+    def get_subscribers(self) -> str or int:
+        if self.item_dict['statistics'].get('hiddenSubscriberCount') == True:
+            return "Hidden"
         else:
-            subcount = int(response['items'][0]['statistics'].get('subscriberCount', 'N/A'))
+            subcount = int(self.item_dict['statistics'].get('subscriberCount', 'N/A'))
         return subcount
-    def get_vidcount(response) -> int:
+    def get_vidcount(self) -> int:
         pass
 
     #items[0]status
-    def get_privacystatus(response) -> str:
+    def get_privacystatus(self) -> str:
         pass
