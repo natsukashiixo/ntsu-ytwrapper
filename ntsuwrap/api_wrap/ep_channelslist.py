@@ -56,17 +56,25 @@ class ParseChannels:
         self.item_dict = item_dict
     #items[0]snippet
     def get_name(self) -> str:
-        return self.item_dict['snippet'].get('')
+        return self.item_dict['snippet'].get('title')
+    
     def get_desc(self) -> str:
-        return self.item_dict['snippet'].get('')
+        return self.item_dict['snippet'].get('description')
+    
     def get_url(self) -> str:
-        return self.item_dict['snippet'].get('')
-    def get_createtime(self) -> datetime:
-        datestring = self.item_dict['snippet'].get('')
-        timestamp = datetime.strptime(datestring,)
-        return timestamp
-    def get_pfp(self, quality='hd' or 'sd' or 'low') -> str:
-        thumbnails = self.item_dict['snippet'].get('thumbnails').get({quality})
+        return self.item_dict['snippet'].get('customUrl')
+    
+    def get_createtime(self, tz='UTC') -> datetime:
+        '''tz variable takes a pytz supported timezone string.
+        Defaults to UTC if not specified.'''
+        yt_time = self.item_dict['snippet'].get('publishedAt', None)
+        dt = datetime.strptime(yt_time, "%Y-%m-%dT%H:%M:%SZ")
+        _tz = pytz.timezone(tz)
+        localized_dt = _tz.localize(dt)
+        return localized_dt
+    
+    def get_pfp(self, quality='default' or 'medium' or 'high') -> str:
+        thumbnails = self.item_dict['snippet'].get('thumbnails').get(quality)
         return thumbnails
     
     #items[0]statistics
@@ -74,11 +82,14 @@ class ParseChannels:
         if self.item_dict['statistics'].get('hiddenSubscriberCount') == True:
             return "Hidden"
         else:
-            subcount = int(self.item_dict['statistics'].get('subscriberCount', 'N/A'))
-        return subcount
+            return self.item_dict['statistics'].get('subscriberCount')
+    
     def get_vidcount(self) -> int:
-        pass
+        return self.item_dict['statistics'].get('videoCount')
+    
+    def get_channel_views(self) -> int:
+        return self.item_dict['statistics'].get('viewCount')
 
     #items[0]status
     def get_privacystatus(self) -> str:
-        pass
+        return self.item_dict['status'].get('privacyStatus')

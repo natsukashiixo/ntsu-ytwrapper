@@ -90,48 +90,62 @@ class PlaylistItemsDotList:
     def all_items(self) -> list:
         return self.yt_response
 
-    #each item in a playlist is its own dict in a list stored in 'items', should i just return lists with no keyword pairing and pray?
 class ParsePlaylistItem:
     def __init__(self, item_dict) -> None:
         self.item_dict = item_dict
+    
     #item[i]snippet
-    def get_vid_playlist_addtime(self) -> datetime:
-        return self.item_dict['snippet'].get('')
-        pass # convert str -> datetime
+    def get_vid_playlist_addtime(self, tz='UTC') -> datetime:
+        '''tz variable takes a pytz supported timezone string.
+        Defaults to UTC if not specified.'''
+        yt_time = self.item_dict['snippet'].get('publishedAt', None)
+        dt = datetime.strptime(yt_time, "%Y-%m-%dT%H:%M:%SZ")
+        _tz = pytz.timezone(tz)
+        localized_dt = _tz.localize(dt)
+        return localized_dt
+    
     def get_vid_playlist_adduser(self) -> str:
-        return self.item_dict['snippet'].get('')
-        pass # gets which user added the video to the playlist, returns a channelID, not sure if i need this?
+        return self.item_dict['snippet'].get('channelID')
+         # gets which user added the video to the playlist, returns a channelID, not sure if i need this?
+    
     def get_vid_title(self) -> str:
-        return self.item_dict['snippet'].get('')
-        pass
+        return self.item_dict['snippet'].get('title')
+        
     def get_vid_desc(self) -> str:
-        return self.item_dict['snippet'].get('')
-        pass
+        return self.item_dict['snippet'].get('description')
+        
     def get_vid_thumbnails(self) -> str:
-        return self.item_dict['snippet'].get('')
-        pass #decorator magic once again
+        return self.item_dict['snippet'].get('thumbnails')
+         #decorator magic once again
+    
     def get_playlist_owner(self) -> str:
-        return self.item_dict['snippet'].get('')
-        pass
+        return self.item_dict['snippet'].get('channelTitle')
+        
     def get_vid_owner_title(self) -> str:
-        return self.item_dict['snippet'].get('')
-        pass
+        return self.item_dict['snippet'].get('videoOwnerChannelTitle')
+        
     def get_vid_owner_id(self) -> str:
-        return self.item_dict['snippet'].get('')
-        pass
+        return self.item_dict['snippet'].get('videoOwnerChannelId')
+        
     def get_vid_index(self) -> int:
-        return self.item_dict['snippet'].get('')
-        pass #placement in playlist, starts at index 0
+        return self.item_dict['snippet'].get('position')
+         #placement in playlist, starts at index 0
+    
     def get_vid_id(self) -> str:
-        return self.item_dict['snippet'].get('')
+        return self.item_dict['snippet'].get('resourceId').get('videoID')
         #snippet.resourceId.videoID
-        pass #docs here are confusing, seem to imply that you can add non-videos to a playlist which feels illegal (livestreams should still be considered videos on youtubes end)
+         #docs here are confusing, seem to imply that you can add non-videos to a playlist which feels illegal (livestreams should still be considered videos on youtubes end)
 
     #item[x]contentDetails
     def get_vid_id_bckp(self) -> str:
-        return self.item_dict['contentDetails'].get('')
-        pass #this is the one i've used before with playlists that contain livestreams, in case previous function doesn't work
-    def get_vid_publishtime(self) -> datetime:
-        return self.item_dict['contentDetails'].get('')
-        pass # str -> datetime conversion pls
+        return self.item_dict['contentDetails'].get('videoID')
+         #this is the one i've used before with playlists that contain livestreams, in case previous function doesn't work
+    def get_vid_publishtime(self, tz='UTC') -> datetime:
+        '''tz variable takes a pytz supported timezone string.
+        Defaults to UTC if not specified.'''
+        yt_time = self.item_dict['contentDetails'].get('videoPublishedAt', None)
+        dt = datetime.strptime(yt_time, "%Y-%m-%dT%H:%M:%SZ")
+        _tz = pytz.timezone(tz)
+        localized_dt = _tz.localize(dt)
+        return localized_dt
     
