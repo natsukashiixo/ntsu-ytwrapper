@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 import googleapiclient.discovery
 import pytz
+import isodate
 from ntsuwrap import YoutubeTokenBucket
 from youtube_status import youtube_status
 
@@ -117,8 +118,8 @@ class ParseVideoItem: #might only need this one and then do some checks if peopl
     #items[0]contentDetails
     def get_duration(self) -> int:
         yt_dur = self.item_dict['contentDetails'].get('duration')
-        #convert to int in seconds probs
-        #check if isodate supports python 3.10, no shot im relying on regex for this lol https://pypi.org/project/isodate/
+        sec = isodate.parse_duration(yt_dur).total_seconds()
+        return sec
 
     def allowed_countries(self) -> list:
         return self.item_dict['contentDetails'].get('regionRestriction').get('allowed', [])
