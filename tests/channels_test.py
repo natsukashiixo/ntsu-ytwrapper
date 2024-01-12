@@ -39,7 +39,7 @@ def test_resp_class_item_by_kwp_is_correct():
     assert TEST_RESP.item_by_snippet_kwp('channelTitle', 'Rick Astley') == {'snippet': {'channelTitle': 'Rick Astley',
                  'channelID': 'UCuAXFkgsw1L7xaCfnd5JJOw'}}
 
-def test_resp_class_all_items_in_correct():
+def test_resp_class_all_items_is_correct():
     assert TEST_RESP.all_items() == [
     {'snippet': {'channelTitle': 'Rick Astley',
                  'channelID': 'UCuAXFkgsw1L7xaCfnd5JJOw'}},
