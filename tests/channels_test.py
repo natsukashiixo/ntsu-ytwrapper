@@ -94,39 +94,39 @@ def test_get_vidcount_is_int():
 psr = ParseChannels({}) #psr means parse sample response :^)
 
 def test_get_name_is_correct():
-    assert pdd.get_name() == ''
+    assert psr.get_name() == ''
 
 def test_get_desc_is_correct():
-    assert pdd.get_desc() == ''
+    assert psr.get_desc() == ''
 
 def test_get_pfp_default_is_correct():
-    assert pdd.get_pfp() == ''
+    assert psr.get_pfp() == ''
 
 def test_get_pfp_explicit_default_is_correct():
-    assert pdd.get_pfp('default') == ''
+    assert psr.get_pfp('default') == ''
 
 def test_get_pfp_medium_is_correct():
-    assert pdd.get_pfp('medium') == ''
+    assert psr.get_pfp('medium') == ''
 
 def test_get_pfp_high_is_correct():
-    assert pdd.get_pfp('high') == ''
+    assert psr.get_pfp('high') == ''
 
 def test_get_createtime_is_correct():
-    assert pdd.get_createtime() == datetime.datetime.now()
+    assert psr.get_createtime() == datetime.datetime.now()
 
 def test_get_url_is_correct():
-    assert pdd.get_url() == ''
+    assert psr.get_url() == ''
 
 def test_get_privacystatus_is_correct():
-    assert pdd.get_privacystatus() == ''
+    assert psr.get_privacystatus() == ''
 
 def test_get_subscribers_is_correct():
-    assert pdd.get_subscribers() == 0
+    assert psr.get_subscribers() == 0
 
 def test_get_channel_views_is_correct():
-    assert pdd.get_channel_views() == 0
+    assert psr.get_channel_views() == 0
 
 def test_get_vidcount_is_correct():
-    assert pdd.get_vidcount() == 0
+    assert psr.get_vidcount() == 0
 
 #write tests designed to fail here i guess?
