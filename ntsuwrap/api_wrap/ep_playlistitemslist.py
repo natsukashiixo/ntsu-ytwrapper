@@ -5,38 +5,6 @@ import pytz
 from ntsuwrap import YoutubeTokenBucket
 from youtube_status import youtube_status
 
-def relay_from_playlist(playlist_id: str, API_KEY: str) -> list | None:
-    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "0"
-
-    api_service_name = "youtube"
-    api_version = "v3"
-    DEVELOPER_KEY = API_KEY
-
-    youtube = googleapiclient.discovery.build(
-        api_service_name, api_version, developerKey = DEVELOPER_KEY)
-
-    request = youtube.playlistItems().list(
-        part="snippet,contentDetails",
-        playlistId=playlist_id,
-        maxResults=50
-    )
-    raw_response = request.execute()
-    
-    #print(raw_response)
-
-    if not raw_response.get('nextPageToken'):
-        videoID_list = []
-        for item in raw_response['items']:
-            #from pprint import pprint
-            #pprint(item, indent=4)
-            vid_id = item['contentDetails']['videoId']
-            videoID_list.append(vid_id)
-        return videoID_list
-    else:
-        print('Relay is currently out of scope of the project. Exiting')
-        return      # No time to implement today, relay starts tomorrow
-    
-
 class PlaylistItemsDotList:
     def __init__(self, api_key: str, playlist_id: str, bucket: YoutubeTokenBucket):
         # these should basically never change between classes
@@ -114,9 +82,8 @@ class ParsePlaylistItem:
     def get_vid_desc(self) -> str:
         return self.item_dict['snippet'].get('description')
         
-    def get_vid_thumbnails(self) -> str:
-        return self.item_dict['snippet'].get('thumbnails')
-         #decorator magic once again
+    def get_vid_thumbnails(self, quality='default' or 'medium' or 'high' or 'standard' or 'maxres') -> str:
+        return self.item_dict['snippet'].get('thumbnails').get(quality)
     
     def get_playlist_owner(self) -> str:
         return self.item_dict['snippet'].get('channelTitle')
@@ -128,8 +95,8 @@ class ParsePlaylistItem:
         return self.item_dict['snippet'].get('videoOwnerChannelId')
         
     def get_vid_index(self) -> int:
+        '''placement in playlist, starts at index 0'''
         return self.item_dict['snippet'].get('position')
-         #placement in playlist, starts at index 0
     
     def get_vid_id(self) -> str:
         return self.item_dict['snippet'].get('resourceId').get('videoID')
