@@ -27,19 +27,19 @@ def test_resp_class_all_items_is_list():
     assert TEST_RESP.all_items() == type(list)
 
 # test values
-def test_resp_class_first_item_is_dict():
+def test_resp_class_first_item_is_correct():
     assert TEST_RESP.first_item() == {'snippet': {'channelTitle': 'Rick Astley',
                  'channelID': 'UCuAXFkgsw1L7xaCfnd5JJOw'}}
 
-def test_resp_class_item_by_index_is_dict():
+def test_resp_class_item_by_index_is_correct():
     assert TEST_RESP.item_by_index(0) == {'snippet': {'channelTitle': 'Rick Astley',
                  'channelID': 'UCuAXFkgsw1L7xaCfnd5JJOw'}}
 
-def test_resp_class_item_by_kwp_is_dict():
+def test_resp_class_item_by_kwp_is_correct():
     assert TEST_RESP.item_by_snippet_kwp('channelTitle', 'Rick Astley') == {'snippet': {'channelTitle': 'Rick Astley',
                  'channelID': 'UCuAXFkgsw1L7xaCfnd5JJOw'}}
 
-def test_resp_class_all_items_in_list():
+def test_resp_class_all_items_in_correct():
     assert TEST_RESP.all_items() == [
     {'snippet': {'channelTitle': 'Rick Astley',
                  'channelID': 'UCuAXFkgsw1L7xaCfnd5JJOw'}},
