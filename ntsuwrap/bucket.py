@@ -24,3 +24,6 @@ class YoutubeTokenBucket:
             self.tokens -= tokens
             return True
         return False
+    
+    def current_amount(self):
+        return self.tokens
