@@ -88,6 +88,9 @@ def test_get_channel_views_is_int():
 def test_get_vidcount_is_int():
     assert pdd.get_vidcount() == type(int)
 
+def test_get_ch_uploads_playlist_id_is_str():
+    assert pdd.get_ch_uploads_playlist_id() == type(str)
+
 #test correct values of parsing using a sample response
 #because i don't yet have a sample response i'll just have to fill this out with generics
     
@@ -128,5 +131,8 @@ def test_get_channel_views_is_correct():
 
 def test_get_vidcount_is_correct():
     assert psr.get_vidcount() == 0
+
+def test_get_ch_uploads_playlist_id_is_correct():
+    assert psr.get_ch_uploads_playlist_id() == ''
 
 #write tests designed to fail here i guess?
