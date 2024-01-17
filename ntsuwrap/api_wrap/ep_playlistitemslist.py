@@ -3,6 +3,8 @@ from datetime import datetime
 import googleapiclient.discovery
 import pytz
 from ntsuwrap import YoutubeTokenBucket
+from ntsuwrap import EmptyResponseError
+from ntsuwrap import PartialResponseError
 from youtube_status import youtube_status
 
 class PlaylistItemsDotList:
@@ -41,22 +43,41 @@ class PlaylistItemsDotList:
 
         if youtube_status() and self.bucket.take(self.TOKENCOST):
             self.yt_response = _get_response()
+            if not self.yt_response:
+                raise EmptyResponseError
 
     def first_item(self) -> dict:
-        return self.yt_response[0] if self.yt_response else {}
+        if not self.yt_response['items'] == []:
+            if not self.yt_response['items'][0] == {}:
+                return self.yt_response['items'][0]
+            raise PartialResponseError
+        raise EmptyResponseError
 
     def item_by_index(self, x: int) -> dict:
-        return self.yt_response[x] if self.yt_response else {}
+        '''You should only do this if you legit know the index'''
+        if not self.yt_response['items'] == []:
+            if not self.yt_response['items'][x] == {}:
+                return self.yt_response['items'][x]
+            raise PartialResponseError
+        raise EmptyResponseError
 
     def item_by_snippet_kwp(self, keyword: str, value) -> dict:
-        for i, item in enumerate(self.yt_response):
-            if item.get('snippet', {}).get(keyword) == value:
-                return item
-        print(f'key value pair {keyword}: {value} not found')
-        return {}
+        '''This is very static and potentially dangerous.
+        Please take care when using. A simple typo could make it return None.'''
+        if not self.yt_response['items'] == []:
+            for i, item in enumerate(self.yt_response.get('items')):
+                if item.get('snippet') == {}:
+                    raise PartialResponseError
+                if item.get('snippet').get(keyword) == value:
+                    return item
+            print(f'key value pair {keyword}: {value} not found')
+            return None
+        raise EmptyResponseError
 
     def all_items(self) -> list:
-        return self.yt_response
+        if not self.yt_response['items'] == []:
+            return self.yt_response['items']
+        raise EmptyResponseError
 
 class ParsePlaylistItem:
     def __init__(self, item_dict) -> None:
