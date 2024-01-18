@@ -2,7 +2,7 @@ import datetime
 import pytz
 
 class YoutubeTokenBucket:
-    ''' Capacity max is 10000 '''
+    ''' Capacity max is 10000 (unless you've negotiated an extension)'''
     def __init__(self, capacity=10000):
         self.max = capacity
         self.tokens = capacity
