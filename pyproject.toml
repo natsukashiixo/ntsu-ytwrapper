@@ -33,7 +33,8 @@ classifiers = [
 dependencies = [ # Optional
   "google-api-python-client",
   "pytz",
-  "Pillow"
+  "Pillow",
+  "isodate",
 ]
 [project.optional-dependencies] # Optional
 dev = []
