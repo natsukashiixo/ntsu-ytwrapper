@@ -99,7 +99,7 @@ class ParseChannels:
         return thumbnails
     
     #items[0]statistics
-    def get_subscribers(self) -> str or int:
+    def get_subscribers(self) -> str | int:
         if self.item_dict['statistics'].get('hiddenSubscriberCount') == True:
             return "Hidden"
         else:
