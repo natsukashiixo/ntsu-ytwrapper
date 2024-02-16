@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+from collections import namedtuple
 import googleapiclient.discovery
 import pytz
 import isodate
@@ -95,6 +96,19 @@ class ParseVideoItem: #might only need this one and then do some checks if peopl
     def get_thumbnail(self, quality='default' or 'medium' or 'high' or 'standard' or 'maxres') -> str:
         return self.item_dict['snippet'].get('thumbnails').get(quality)
         #i actually just want to be able to call an attribute of it like resp.get_thumbnail().maxres but i have no idea how to write that and it possibly involves subclassing so this hack will have to do
+        
+    Thumbnail = namedtuple('Thumbnail', 'default medium high standard maxres')
+    vid_thumb = Thumbnail(
+        self.item_dict['snippet'].get('thumbnails').get('default'), 
+        self.item_dict['snippet'].get('thumbnails').get('medium'),
+        self.item_dict['snippet'].get('thumbnails').get('high'),
+        self.item_dict['snippet'].get('thumbnails').get('standard'),
+        self.item_dict['snippet'].get('thumbnails').get('maxres')
+        )
+    #genuinely have no idea if this is allowed, recommended or anything.
+    #the idea here is that hopefully you can just do api_response.vid_thumb.maxres for instance, but idk if i need to somehow pass self into the subclass
+    #it's also inconsistent with the rest of the patterns so it probably makes usage less intuitive
+    #i kinda feel like i could really use a dedicated mentor lol
     
     def get_ch_id(self) -> str:
         return self.item_dict['snippet'].get('channelId')
